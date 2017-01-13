@@ -1,0 +1,11 @@
+FROM zenoss/centos-base:1.1.1-java
+
+ADD {{SOLR_TARBALL}} /opt
+RUN groupadd -g 1207 -r solr && \
+    useradd -u 1207 -g solr -r solr -d /opt/solr -c "Solr" && \
+    ln -s /opt/solr-{{SOLR_VERSION}} /opt/solr && \
+    mkdir -p /opt/solr/server/solr/lib  && \
+    chown -R solr:solr /opt/solr-{{SOLR_VERSION}}
+EXPOSE 8983
+USER solr
+CMD ["/opt/solr/bin/solr", "start", "-f", "-c"]
