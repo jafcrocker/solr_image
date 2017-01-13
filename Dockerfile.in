@@ -5,7 +5,10 @@ RUN groupadd -g 1207 -r solr && \
     useradd -u 1207 -g solr -r solr -d /opt/solr -c "Solr" && \
     ln -s /opt/solr-{{SOLR_VERSION}} /opt/solr && \
     mkdir -p /opt/solr/server/solr/lib  && \
-    chown -R solr:solr /opt/solr-{{SOLR_VERSION}}
+    chown -R solr:solr /opt/solr-{{SOLR_VERSION}} && \
+    mkdir -p /var/data/solr && \
+    chown solr:solr /var/data/solr
+
 EXPOSE 8983
 USER solr
-CMD ["/opt/solr/bin/solr", "start", "-f", "-c"]
+CMD ["/opt/solr/bin/solr", "start", "-f", "-c", "-Dsolr.data.dir=/var/data/solr"]
